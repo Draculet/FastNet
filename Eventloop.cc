@@ -2,6 +2,7 @@
 #include "Eventloop.h"
 #include "Gettid.h"
 #include <assert.h>
+#include "Channel.h"
 
 using namespace std;
 using namespace net;

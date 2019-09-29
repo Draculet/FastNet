@@ -4,12 +4,11 @@
 #include <sys/epoll.h>
 #include <unistd.h>
 #include <stdio.h>
-#include "Channel.h"
+#include <vector>
 
 namespace net
 {
 const int kinitlist = 16;
-
 class Channel;
 class Poller
 {

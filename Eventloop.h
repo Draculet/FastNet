@@ -10,7 +10,6 @@
 
 namespace net
 {
-    class Poller;
     class Channel;
     class Eventloop : base::noncopyable
     {
