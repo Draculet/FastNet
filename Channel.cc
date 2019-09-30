@@ -1,5 +1,6 @@
 #include "Channel.h"
 #include "Eventloop.h"
+#include <assert.h>
 
 using namespace net;
 using namespace std;
@@ -20,12 +21,25 @@ void Channel::handleEvent()
 {
     //TODO 其他状态也需要处理
     //TODO 标志?
+    //debug 
+    printf("I am In Channel::handleEvent\n");
     if (revent_ & EPOLLIN)
-        readCallback_();
+    {
+        if (readCallback_)
+            readCallback_();
+    }
     if (revent_ & EPOLLOUT)
-        writeCallback_();
+    {
+        if (writeCallback_)
+            writeCallback_();
+    }
     if (revent_ & EPOLLERR)
-        errCallback_();
+    {
+        if (errCallback_)
+            errCallback_();
+    }
+    //debug
+    printf("I am Leaving Channel::handleEvent\n");
 }
 
 void Channel::update()

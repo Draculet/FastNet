@@ -91,6 +91,6 @@ void Poller::removeChannel(int fd)
     //TODO 保证fd在channel map里存在 
     //if ()
     int ret = epoll_ctl(epfd_, EPOLL_CTL_DEL, fd, nullptr);
-    assert(ret != -1);
+    assert(ret != -1);//debug 出现过问题
     //TODO epoll_ctl返回错误处理
 }

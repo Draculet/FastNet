@@ -53,11 +53,17 @@ void Eventloop::dotasks()
     taskQueue tmptasks;
     {
         MutexGuard mutex(mutex_);
-        tmptasks.swap(tasks);
+        if (tasks.size() != 0)
+            tmptasks.swap(tasks);
     }
-    for (auto task : tmptasks)
+    if (tmptasks.size() != 0)
     {
-        task();
+        for (auto task : tmptasks)
+        {
+            printf("debug dotask\n");
+            assert(task != nullptr);
+            task();
+        }
     }
 }
 

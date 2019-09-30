@@ -14,6 +14,7 @@ class Channel: base::noncopyable
 {
     public:
     Channel(int fd, Eventloop *loop);
+    ~Channel(){printf("\n\nChannel Has Been Cashed!!!\n\n");}
     void enableRead(){event_ |= EPOLLIN; update();}
     void enableWrite(){event_ |= EPOLLOUT; update();}
     void disableRead(){event_ &= ~EPOLLIN; update();}
@@ -29,6 +30,8 @@ class Channel: base::noncopyable
     void setRevent(int event){revent_ = event;}
     int getEvent(){return event_;}
     int getFd(){return fd_;}
+    //TODO临时debug
+    Eventloop *getLoop(){return loop_;}
     //TODO 
     bool exist;//用于标记channel在epoll中是否已存在
 
