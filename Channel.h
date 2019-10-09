@@ -14,7 +14,7 @@ class Channel: base::noncopyable
 {
     public:
     Channel(int fd, Eventloop *loop);
-    ~Channel(){printf("\n\nChannel Has Been Cashed!!!\n\n");}
+    ~Channel(){}//TODO
     void enableRead(){event_ |= EPOLLIN; update();}
     void enableWrite(){event_ |= EPOLLOUT; update();}
     void disableRead(){event_ &= ~EPOLLIN; update();}

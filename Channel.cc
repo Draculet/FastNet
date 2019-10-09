@@ -22,7 +22,7 @@ void Channel::handleEvent()
     //TODO 其他状态也需要处理
     //TODO 标志?
     //debug 
-    printf("I am In Channel::handleEvent\n");
+    //printf("I am In Channel::handleEvent\n");
     if (revent_ & EPOLLIN)
     {
         if (readCallback_)
@@ -39,7 +39,7 @@ void Channel::handleEvent()
             errCallback_();
     }
     //debug
-    printf("I am Leaving Channel::handleEvent\n");
+    //printf("I am Leaving Channel::handleEvent\n");
 }
 
 void Channel::update()
