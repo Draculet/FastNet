@@ -5,21 +5,36 @@
 #include <sys/socket.h>
 #include <unistd.h>
 #include <string.h>
+#include <iostream>
 
-namespace net
-{
+using namespace std;
+
     class NetAddr
     {
         public:
-        NetAddr(int port);
-        NetAddr(int ,sockaddr_in);
-        sockaddr_in getAddr(){return addr_;}
-        int getPort(){return addr_.sin_port;};
-        int getFd(){return fd_;};
+        sockaddr_in getAddr()
+        {
+            return addr_;
+        }
+
+        int getPort()
+        {
+            return addr_.sin_port;
+        }
+
+        string getIp()
+        {
+            char ip[64] = {0}
+            return string(inet_ntop(AF_INET, &addr_.sin_addr, ip, sizeof(ip)));
+        }
+
+        int getFd()
+        {
+            return fd_;
+        }
+
         private:
         sockaddr_in addr_;
         int fd_;
     };
-}
-
 #endif
