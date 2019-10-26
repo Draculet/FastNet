@@ -24,6 +24,7 @@ class Channel: base::noncopyable
     //使用异步(加入loop队列)还是同步(线程直接调用)? 是否会有跨线程调用的可能
     void update();
     void handleEvent();
+    //TODO 改成移动
     void setReadCallback(std::function<void()> readCallback){readCallback_ = readCallback;}
     void setWriteCallback(std::function<void()> writeCallback){writeCallback_ = writeCallback;}
     //TODO void setConnection(std::shared_ptr<Connection> ptr){connptr_ = ptr;}

@@ -28,6 +28,11 @@ int Poller::poll(channelList *activelist)
     if (ret > 0)
     {
         fillActiveChannel(activelist, ret);
+        //弹性增长
+        if (ret == events_.size())
+        {
+            events_.resize(ret * 2);
+        }
     }
     return ret;
 }
@@ -44,10 +49,13 @@ void Poller::fillActiveChannel(channelList *activelist, int ret)
         activelist->push_back(channel);
     }
     //将vector清零而不能用clear,否则size == 0,epoll_wait会报错
+    //清零是否必要?
+    /*
     for (int i = 0; i < ret; i++)
     {
         memset(&events_[i], 0, sizeof(events_[i]));
     }
+    */
 }
 
 void Poller::update(Channel *channel)
