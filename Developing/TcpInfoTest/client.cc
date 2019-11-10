@@ -11,7 +11,7 @@
  
 #define SERVERIP "127.0.0.1"
 #define SERVERPORT 9981
-#define MAXBUFFER 256
+#define MAXBUFFER 1024
 
 
 void getTcpInfo(int sockfd)
@@ -89,7 +89,10 @@ int main(int argc, char** argv)
 			{
 				printf("read return 0\n");
 				sleep(1);
+				//读到0之后(即收到服务端的fin,此时状态处于close_wait)
+				//调用shutdown发送fin
 				//::shutdown(clientFd, SHUT_RDWR);
+				//不断获取状态信息
 				while(1)
 				{
 					getTcpInfo(clientFd);

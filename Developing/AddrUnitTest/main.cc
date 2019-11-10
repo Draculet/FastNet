@@ -52,7 +52,7 @@ void getTcpInfo(int sockfd)
 int main(void)
 {
     //Socket soc("192.168.42.146", 9981);
-    Socket soc("0.0.0.0", 9981);
+    Socket soc(9981);
     int optval = 1;
     ::setsockopt(soc.getFd(), SOL_SOCKET, SO_REUSEADDR, &optval, sizeof(optval));
     optval = 1;
@@ -68,7 +68,7 @@ int main(void)
     {
         NetAddr addr;
         int fd = soc.accept(&addr);
-        //cout << "Accept new connection from " << soc.getAddr()->getIp() << ":" << soc.getAddr()->getPort() << endl;
+        cout << "Accept new connection from " << soc.getAddr()->getIp() << ":" << soc.getAddr()->getPort() << endl;
         //fd2 = soc2.accept(&addr);
         //cout << "Accept new connection from " << soc.getAddr()->getIp() << ":" << soc.getAddr()->getPort() << endl;
         if (fd < 0)

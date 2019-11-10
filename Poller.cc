@@ -65,8 +65,6 @@ void Poller::update(Channel *channel)
     ev.data.ptr = channel;
     if (channel->exist)
     {
-        //不用担心ev是指针有生命周期问题,因为epoll会在内核拷贝这个结构体
-        //需要保证的是channel的生命周期
         if (ev.events == 0)
         {
             printf("removechannel %d\n", channel->getFd());
@@ -77,6 +75,8 @@ void Poller::update(Channel *channel)
         else
         {
             printf("modchannel %d\n", channel->getFd());
+            //不用担心传入的ev是指针epoll_event有生命周期问题,因为epoll会在内核拷贝这个结构体
+            //需要保证的是channel的生命周期
             int ret = epoll_ctl(epfd_, EPOLL_CTL_MOD, channel->getFd(), &ev);
             assert(ret != -1);
             //TODO epoll_ctl返回错误处理

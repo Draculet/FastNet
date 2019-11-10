@@ -1,12 +1,10 @@
 #include <stdio.h>
 #include <stdlib.h>
-#include <sys/socket.h>
+//#include <sys/socket.h>
 #include <string.h>
 #include <errno.h>
-#include <netinet/in.h>
-#include <netinet/tcp.h>
-#include <arpa/inet.h>
-#include <unistd.h>
+//#include <arpa/inet.h>
+//#include <unistd.h>
 #include <pthread.h>
  
 #define SERVERIP "127.0.0.1"
@@ -15,44 +13,6 @@
 
 void *client_echo(void *);
 
-void getTcpInfo(int sockfd)
-{
-    struct tcp_info tcpi;
-    socklen_t len = sizeof(tcpi);
-    bzero(&tcpi, len);
-    int ret = ::getsockopt(sockfd, SOL_TCP, TCP_INFO, &tcpi, &len);
-    if (ret < 0)
-    {
-        printf("Get Info Error\n");
-    }
-    else
-    {
-        if (tcpi.tcpi_state == TCP_LISTEN)
-            printf("LISTERN\n");
-        else if (tcpi.tcpi_state == TCP_FIN_WAIT1)
-            printf("FIN_WAIT\n");
-        else if (tcpi.tcpi_state == TCP_FIN_WAIT2)
-            printf("FIN_WAIT2\n");
-        else if (tcpi.tcpi_state == TCP_TIME_WAIT)
-            printf("TIME_WAIT\n");
-        else if (tcpi.tcpi_state == TCP_ESTABLISHED)
-            printf("ESTABLISHED\n");
-        else if (tcpi.tcpi_state == TCP_CLOSE_WAIT)
-            printf("CLOSE_WAIT\n");
-        else if (tcpi.tcpi_state == TCP_LAST_ACK)
-            printf("LAST_ACK\n");
-        else if (tcpi.tcpi_state == TCP_CLOSE)
-            printf("CLOSED\n");
-        else if (tcpi.tcpi_state == TCP_SYN_RECV)
-            printf("SYN_RCVD\n");
-        else if (tcpi.tcpi_state == TCP_SYN_SENT)
-            printf("SYN_SEND\n");
-        else if (tcpi.tcpi_state == TCP_CLOSING)
-            printf("CLOSING\n");
-        else
-            printf("ERROR_STATE\n");
-    }
-}
 
 int main(int argc, char** argv)
 {  

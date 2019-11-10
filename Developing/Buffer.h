@@ -27,7 +27,12 @@ namespace net
             assert(writable() == buffer_.size() - kinitPreSize_);
             assert(prependable() == 8);
         }
-        
+
+        const char *current()
+        {
+            return begin() + kreadIndex_;
+        }
+
         size_t readable()
         {
             return kwriteIndex_ - kreadIndex_;

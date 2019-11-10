@@ -10,9 +10,16 @@ using namespace base;
 
 Eventloop::Eventloop()
     : poller_(new Poller()),
-    quit_(false)
+    tid_(gettid()), //初始化时直接赋值
+    quit_(false),
+    mutex_()
 {
 
+}
+
+Eventloop::~Eventloop()
+{
+    
 }
 
 void Eventloop::loop()
@@ -39,6 +46,18 @@ void Eventloop::loop()
     //TODO 
 }
 
+/*
+    11.10
+    Eventloop的tid是只读对象,应该在初始化时就确定并且不再改变
+    因此Eventloop需要是在线程上初始化的对象
+    不能在主线程初始化
+    
+    下面这种传递tid方式会造成不安全的访问
+    如果想要访问安全,之后每次访问tid_都必须加锁
+    
+*/
+
+ /*
 void Eventloop::runInThread()
 {
     {
@@ -47,6 +66,14 @@ void Eventloop::runInThread()
     }
     loop();
 }
+*/
+/*
+    11.10 new version
+    将runInTHread移到ThreadLoop
+ */
+
+
+
 
 void Eventloop::dotasks()
 {

@@ -11,9 +11,9 @@ void *Thread::threadFunc(void *arg)
 
 Thread::Thread(function<void()> func):
     td_(func)
-    {
+{
 
-    }
+}
 
 void Thread::start()
 {

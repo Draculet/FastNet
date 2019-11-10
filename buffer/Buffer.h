@@ -10,7 +10,7 @@ namespace net
 {
     const size_t kinitSize = 1024;
     const size_t kinitPreSize = 8;
-    class Buffer : common::noncopyable
+    class Buffer : base::noncopyable
     {
         public:
         Buffer():kinitPreSize_(kinitPreSize),

@@ -13,10 +13,14 @@ struct trData
 {
     trData(std::function<void()> func):
         runInThread(func)
-        {
+    {
 
-        }
-    void run(){runInThread();}
+    }
+    void run()
+    {
+        runInThread();
+    }
+    
     std::function<void()> runInThread;
     //TODO 是否保存
 };

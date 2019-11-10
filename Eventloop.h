@@ -18,8 +18,9 @@ namespace net
         typedef std::vector<Channel *> channelList;
         typedef std::vector<std::function<void()>> taskQueue;
         Eventloop();
+        ~Eventloop();//TODO 待补充
         void loop();
-        void runInThread();//thread的函数
+        //void runInThread();//thread的函数//已移除
         void update(Channel *channel);//注册关注事件
         void dotasks();//消费队列任务
         void insertQueue(std::function<void()>);//将任务插入任务队列
@@ -30,9 +31,9 @@ namespace net
         taskQueue tasks;
         private:
         std::unique_ptr<Poller> poller_;
-        Mutex mutex_;
         int tid_;//用于判断currentThread是否是ownThread
         bool quit_;//用于判断loop退出否,是否应用mutex保护?
+        Mutex mutex_;
     };
 }
 

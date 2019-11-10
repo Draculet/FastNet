@@ -150,7 +150,7 @@ class Socket : base::noncopyable
         //TODO 判监听失败,日志输出
     }
 
-    void shutdown()
+    void shutdownWR()
     {
         //shutdown默认只关闭写端,防止有信息未接受
         int ret = ::shutdown(fd_, SHUT_WR);

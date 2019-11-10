@@ -1,5 +1,12 @@
-#include "NetAddr.h"
-#include "Socket.h"
+#include <sys/types.h>
+#include <sys/socket.h>
+#include <string>
+#include <arpa/inet.h>
+#include <unistd.h>
+#include <netinet/in.h>
+#include <netinet/tcp.h>
+#include <fcntl.h>
+#include <string.h>
 
 using namespace std;
 
@@ -7,9 +14,7 @@ void getTcpInfo(int sockfd)
 {
     struct tcp_info tcpi;
     socklen_t len = sizeof(tcp_info);
-    //printf("%d\n", len);
     bzero(&tcpi, len);
-    //printf("%d\n", tcpi.tcpi_state);
     int ret = ::getsockopt(sockfd, SOL_TCP, TCP_INFO, &tcpi, &len);
     if (ret < 0)
     {
@@ -22,9 +27,6 @@ void getTcpInfo(int sockfd)
             printf("LISTERN\n");
         else if (tcpi.tcpi_state == TCP_TIME_WAIT)
         {
-            printf("TIME_WAIT\n");
-            printf("TIME_WAIT\n");
-            printf("TIME_WAIT\n");
             printf("TIME_WAIT\n");
             exit(-1);
         }
@@ -55,10 +57,6 @@ int main(void)
 {
         int fd = ::socket(PF_INET, SOCK_STREAM, 0);
         getTcpInfo(fd);
-        if (fd < 0)
-        {
-            perror("createNonBlockAndBind");
-        }
         sockaddr_in servaddr;
         bzero(&servaddr,sizeof(servaddr));
         servaddr.sin_family = AF_INET;
@@ -88,6 +86,7 @@ int main(void)
             return -1;
         }
         char buf[512] = {0};
+        //写一点data
         ret = write(connfd, buf, 512);
         if (ret < 0)
         {
@@ -98,9 +97,16 @@ int main(void)
             printf("send %d bytes\n", ret);
         }
         sleep(1);
-        ::shutdown(connfd, SHUT_RD);
+        //直接关闭
+        //close会释放文件描述符,造成获取tcpinfo失败
+        //shutdown之后会发送fin并进入fin_wait1
+        //在接受到对方的ack后进入fin_wait2
+        ::shutdown(connfd, SHUT_RDWR);
+        //如果接受到对方发的fin之后理应进入time_wait状态
+        //但下面打印的信息显示fin_wait2之后直接进入了close状态
         printf("close socket\n");
         getTcpInfo(connfd);
+        //打印获取tcp连接状态
         for (;;)
         {
             getTcpInfo(connfd);

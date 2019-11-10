@@ -6,12 +6,24 @@
 #include <unistd.h>
 #include <string.h>
 #include <iostream>
+#include <fcntl.h>
 
 using namespace std;
 
     class NetAddr
     {
         public:
+        NetAddr(sockaddr_in addr):
+            addr_(addr)
+        {
+
+        }
+
+        NetAddr()
+        {
+            bzero(&addr_, sizeof(addr_));
+        }
+
         sockaddr_in getAddr()
         {
             return addr_;
@@ -19,22 +31,21 @@ using namespace std;
 
         int getPort()
         {
-            return addr_.sin_port;
+            return ntohs(addr_.sin_port);
         }
 
         string getIp()
         {
-            char ip[64] = {0}
+            char ip[64] = {0};
             return string(inet_ntop(AF_INET, &addr_.sin_addr, ip, sizeof(ip)));
         }
 
-        int getFd()
+        void setAddr(sockaddr_in addr)
         {
-            return fd_;
+            addr_ = addr;
         }
-
+        
         private:
         sockaddr_in addr_;
-        int fd_;
     };
 #endif
