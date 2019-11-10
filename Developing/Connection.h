@@ -16,7 +16,7 @@ class Connection;
 typedef shared_ptr<Connection> Connptr;
 
 
-class Connection : noncopyable
+class Connection : noncopyable : base::noncopyable
 {
     public:
     Connection(int fd, NetAddr &addr, Eventloop *loop)
@@ -26,11 +26,24 @@ class Connection : noncopyable
          outputbuffer_(),
          loop_(loop),
          highWaterMark(1024 * 10 * 10),
-         state_(kConnected)
+         state_(kInit)
     {
 
     }
 
+    void handleEstablish()
+    {
+        state_ = kConnected;
+        //不能传shared_from_this(),不能将指针保存在Channel中,会造成析构失败
+        //需要在Channel调用ReadCallback函数时对Connection保护,已完成
+        //详见Developing/Channel handleEvent函数
+        chan_->setReadCallback(&Connection::handleRead, this);//TODO 改成move
+        chan_->setWriteCallback(&Connection::handleWrite, this);
+        chan_->setCloseCallback(&Connection::handleClose, this);
+        chan_->setErrorCallback(&Connection::handleError, this);
+        chan_->enableRead();
+        //TODO 日志输出
+    }
     /*
         handleRead连同this指针保存于function,并传给Channel
         Channel在调用handle系列函数之前需要先保护Connection
@@ -40,11 +53,11 @@ class Connection : noncopyable
         int ret = inputbuffer_.readFd(soc_.getFd());
         if (ret > 0)
         {
-            readCallback(&inputbuffer_, shared_from_this() );
+            readCallback_(&inputbuffer_, shared_from_this() );
         }
         else if (ret == 0)
         {
-            closeCallback();
+            handleClose();
         }
         else
         {
@@ -178,6 +191,15 @@ class Connection : noncopyable
         return remain;
     }
 
+    void setReadCallback(function<void (Buffer *, Connection *)> readCallback)
+    {
+        readCallback_ = readCallback;
+    }
+
+    void setCloseCallback(function<void (Connptr)> closeCallback)
+    {
+        closeCallback_ = closeCallback;
+    }
 
     private:
     unique_ptr<Socket> soc_;
@@ -187,10 +209,9 @@ class Connection : noncopyable
     //function<void (Buffer *, Connection *)> writeCallback;
     Eventloop * loop_;
     int highWaterMark;
-    enum {kinit, kConnected, kClosed} state_;
-    function<void (Buffer *, Connection *)> readCallback;
-    function<void (Connptr)> closeCallback;
-    function<>
+    enum {kInit, kConnected, kClosed} state_;
+    function<void (Buffer *, Connection *)> readCallback_;
+    function<void (Connptr)> closeCallback_;
 };
 
 #endif

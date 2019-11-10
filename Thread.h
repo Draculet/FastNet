@@ -28,6 +28,7 @@ class Thread
 {
     public:
     Thread(std::function<void()>);
+    ~Thread();
     void start();
     static void *threadFunc(void *);
 

@@ -27,6 +27,8 @@ class Channel: base::noncopyable
     //TODO 改成移动
     void setReadCallback(std::function<void()> readCallback){readCallback_ = readCallback;}
     void setWriteCallback(std::function<void()> writeCallback){writeCallback_ = writeCallback;}
+    void setCloseCallback(std::function<void()> closeCallback){closeCallback_ = closeCallback;}
+    void setErrorCallback(std::function<void()> errCallback){errCallback_ = errCallback;}
     //TODO void setConnection(std::shared_ptr<Connection> ptr){connptr_ = ptr;}
     void setRevent(int event){revent_ = event;}
     int getEvent(){return event_;}
@@ -44,6 +46,7 @@ class Channel: base::noncopyable
     std::function<void()> readCallback_;
     std::function<void()> writeCallback_;
     std::function<void()> errCallback_;
+    std::function<void ()> closeCallback_;
     Eventloop *loop_;//主要用于accepor这样没有连接的类,同时方便更新事件
 };  
 

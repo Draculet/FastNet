@@ -7,6 +7,7 @@
 #include "Poller.h"
 #include "Gettid.h"
 #include "Mutex.h"
+#include "Channel.h"
 
 namespace net
 {
@@ -26,6 +27,8 @@ namespace net
         void insertQueue(std::function<void()>);//将任务插入任务队列
         void runInloop(std::function<void()>);//跨线程调用核心
         bool inloop(){return tid_ == base::gettid();}
+        void wakeup();
+        void handleRead();
         //TODO connectionList connlist;
         channelList activelist;
         taskQueue tasks;
@@ -33,6 +36,10 @@ namespace net
         std::unique_ptr<Poller> poller_;
         int tid_;//用于判断currentThread是否是ownThread
         bool quit_;//用于判断loop退出否,是否应用mutex保护?
+        //TODO quit_用atomic<bool>
+
+        int wakeFd_;
+        unique_ptr<Channel> wakechan_;
         Mutex mutex_;
     };
 }

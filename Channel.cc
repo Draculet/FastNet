@@ -20,6 +20,7 @@ Channel::Channel(int fd, Eventloop *loop)
 void Channel::handleEvent()
 {
     //TODO 其他状态也需要处理
+    //TODO closeCallback()没有调用
     //TODO 标志?
     //debug 
     //printf("I am In Channel::handleEvent\n");

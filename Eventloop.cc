@@ -8,18 +8,59 @@ using namespace std;
 using namespace net;
 using namespace base;
 
-Eventloop::Eventloop()
-    : poller_(new Poller()),
+Eventloop::Eventloop():
+    poller_(new Poller()),
     tid_(gettid()), //初始化时直接赋值
     quit_(false),
+    wakeFd_(getWakeupFd()),
+    wakechan_(new Channel(wakeFd_, this)),
     mutex_()
 {
-
+    wakechan_->setReadCallback(bind(&Eventloop::handleRead, this));
+    wakechan_->enableRead();
 }
 
 Eventloop::~Eventloop()
 {
-    
+    wakechan_->disableAll();
+    ::close(wakeFd_);
+}
+
+/*
+    FIXME 错误使用!!
+
+void Eventloop::handleRead()
+{
+    char buf[128] = {0};
+    int ret = read(wakeFd_, buf, 128);//保证将缓冲区清空
+    if (ret != sizeof(int))
+    {
+        //错误日志输出
+    }
+}
+
+/*
+    FIXME 错误使用!!
+void Eventloop::wakeUp()
+{
+    int num = 8;
+    int ret = write(wakeFd_, &num, sizeof(int));
+    if (ret != s.size())
+    {
+        //错误日志输出
+    }
+}
+*/
+
+int Eventloop::getWakeupFd()
+{
+    int fd = ::eventfd(0, EFD_NONBLOCK | EFD_CLOEXEC);
+    if (fd < 0)
+    {
+        //TODO 日志输出
+        exit(-1);
+    }
+    return fd;
 }
 
 void Eventloop::loop()
@@ -73,8 +114,6 @@ void Eventloop::runInThread()
  */
 
 
-
-
 void Eventloop::dotasks()
 {
     taskQueue tmptasks;
@@ -100,7 +139,7 @@ void Eventloop::insertQueue(function<void()> func)
         MutexGuard mutex(mutex_);
         tasks.push_back(std::move(func));
     }
-    //TODO wakeup();
+    wakeUp();
 }
 
 void Eventloop::runInloop(function<void()> func)

@@ -1,3 +1,6 @@
+#ifndef __THREAD_LOOP_H__
+#define __THREAD_LOOP_H__
+
 #include "Thread.h"
 #include "Eventloop.h"
 #include "Mutex.h"
@@ -10,8 +13,8 @@ class ThreadLoop
 {
     public:
     ThreadLoop():
-        loop_(new Eventloop()),
-        thread_(new Thread(&Eventloop::runInThread, &loop_),
+        loop_(nullptr),
+        thread_(new Thread(runInThread),
         mutex_(),
         cond_(mutex_),
         state_(kRun)
@@ -22,6 +25,12 @@ class ThreadLoop
     ~ThreadLoop()
     {
         //TODO 填充细节处理,日志输出
+        //线程的析构交由Thread处理
+    }
+
+    Eventloop *getLoop()
+    {
+        return loop_; 
     }
 
     void start()
@@ -66,3 +75,5 @@ class ThreadLoop
     Condition cond_;
     enum {kRun, kQuit} state_;
 }
+
+#endif
