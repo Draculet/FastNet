@@ -22,7 +22,7 @@ int Poller::poll(channelList *activelist)
     //TODO events_伸缩
     assert(events_.size() >= kinitlist);
     int ret = epoll_wait(epfd_, &*events_.begin(), events_.size(), -1);
-    printf("epoll_wait ret %d\n", ret);
+    printf("*debug* epoll_wait ret %d\n", ret);
     if (ret == -1)
         perror("epoll");
     if (ret > 0)
@@ -67,14 +67,13 @@ void Poller::update(Channel *channel)
     {
         if (ev.events == 0)
         {
-            printf("removechannel %d\n", channel->getFd());
             removeChannel(channel->getFd());
             channel->exist = false;
             return;//FIXME 多个出口
         }
         else
         {
-            printf("modchannel %d\n", channel->getFd());
+            printf("*debug* modchannel %d\n", channel->getFd());
             //不用担心传入的ev是指针epoll_event有生命周期问题,因为epoll会在内核拷贝这个结构体
             //需要保证的是channel的生命周期
             int ret = epoll_ctl(epfd_, EPOLL_CTL_MOD, channel->getFd(), &ev);
@@ -86,7 +85,7 @@ void Poller::update(Channel *channel)
     {
         if (ev.events != 0)//events == 0 && ev.exist == false什么都不做
         {
-            printf("addchannel %d\n", channel->getFd());
+            printf("*debug* addchannel %d\n", channel->getFd());
             int ret = epoll_ctl(epfd_, EPOLL_CTL_ADD, channel->getFd(), &ev);
             assert(ret != -1);
             channel->exist = true;
@@ -98,6 +97,7 @@ void Poller::removeChannel(int fd)
 {
     //TODO 保证fd在channel map里存在 
     //if ()
+    printf("*debug* removechannel %d\n", fd);
     int ret = epoll_ctl(epfd_, EPOLL_CTL_DEL, fd, nullptr);
     assert(ret != -1);//debug 出现过问题
     //TODO epoll_ctl返回错误处理

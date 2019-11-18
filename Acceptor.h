@@ -7,6 +7,8 @@
 #include "NetAddr.h"
 #include <errno.h>
 
+using namespace net;
+using namespace std;
 class Acceptor : base::noncopyable
 {
     public:
@@ -29,9 +31,10 @@ class Acceptor : base::noncopyable
     {
         newConnCallback_ = newConnCallback;
     }
+    
     void listen()
     {
-        acceptchan_->setReadCallback(&Acceptor::handleRead, this);
+        acceptchan_->setReadCallback(bind(&Acceptor::handleRead, this));
         acceptsoc_->listen();
         acceptchan_->enableRead();
     }
@@ -40,6 +43,7 @@ class Acceptor : base::noncopyable
     {
         NetAddr addr;
         int sockfd = acceptsoc_->accept(&addr);
+        printf("*debug* accept conn %s\n", addr.toString().c_str());
         if (sockfd < 0)//返回-1,可能是异步正常返回,也可能是fd用完
         {
             if (errno == EMFILE)
@@ -54,10 +58,13 @@ class Acceptor : base::noncopyable
         }
         else//当标准输入关闭时,sockfd可能返回0
         {
-            if (newConnCallback)
-                newConnCallback(sockfd, addr);
+            if (newConnCallback_)
+                newConnCallback_(sockfd, addr);
             else//出现错误
+            {
+                printf("*debug* no newConnection\n");
                 ::close(sockfd);
+            }
         }
     }
 
@@ -68,4 +75,6 @@ class Acceptor : base::noncopyable
     int extraFd_;//防止fd用完无法关闭新到连接
     
     function<void (int, NetAddr&)> newConnCallback_;
-}
+};
+
+#endif

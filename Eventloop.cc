@@ -3,6 +3,8 @@
 #include "Gettid.h"
 #include <assert.h>
 #include "Channel.h"
+#include <sys/eventfd.h>
+#include "Gettid.h"
 
 using namespace std;
 using namespace net;
@@ -26,31 +28,30 @@ Eventloop::~Eventloop()
     ::close(wakeFd_);
 }
 
-/*
-    FIXME 错误使用!!
-
 void Eventloop::handleRead()
 {
-    char buf[128] = {0};
-    int ret = read(wakeFd_, buf, 128);//保证将缓冲区清空
-    if (ret != sizeof(int))
+    printf("*debug* In Thread %d Be WakeUped()\n", gettid());
+    uint64_t n = 1;
+    int ret = read(wakeFd_, &n, sizeof(uint64_t));//保证将缓冲区清空
+    if (ret != sizeof(uint64_t))
     {
-        //错误日志输出
+        //TODO 错误日志输出
+        exit(-1);
     }
 }
 
-/*
-    FIXME 错误使用!!
+
 void Eventloop::wakeUp()
 {
-    int num = 8;
-    int ret = write(wakeFd_, &num, sizeof(int));
-    if (ret != s.size())
+    uint64_t n = 1;
+    int ret = write(wakeFd_, &n, sizeof(uint64_t));
+    if (ret != sizeof(uint64_t))
     {
-        //错误日志输出
+        //TODO 错误日志输出
+        exit(-1);
     }
 }
-*/
+
 
 int Eventloop::getWakeupFd()
 {
@@ -70,6 +71,7 @@ void Eventloop::loop()
     {
         //poll返回值处理?
         int ret = poller_->poll(&activelist);
+        printf("*debug* In Thread %d Poller Return\n", gettid());
         if (ret == 0)
             ;//TODO 报告无事件发生
         else if (ret == -1)
@@ -124,9 +126,9 @@ void Eventloop::dotasks()
     }
     if (tmptasks.size() != 0)
     {
+        printf("*debug* dotasks nums %d\n", tmptasks.size());
         for (auto task : tmptasks)
         {
-            printf("debug dotask\n");
             assert(task != nullptr);
             task();
         }
@@ -145,9 +147,15 @@ void Eventloop::insertQueue(function<void()> func)
 void Eventloop::runInloop(function<void()> func)
 {
     if (inloop())
+    {
+        printf("*debug* In Thread %d RunInloop Directly()\n", gettid());
         func();
+    }
     else
+    {
+        printf("*debug* In Thread %d Cross Thread RunInloop()\n", gettid());
         insertQueue(std::move(func));//调用移动构造函数
+    }
 }
 
 void Eventloop::update(Channel *channel)

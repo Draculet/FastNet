@@ -4,17 +4,20 @@
 #include "Thread.h"
 #include "Eventloop.h"
 #include "Mutex.h"
+#include "Condition.h"
 #include <memory>
+#include <functional>
 
 using namespace std;
 using namespace net;
+using namespace base;
 
 class ThreadLoop
 {
     public:
     ThreadLoop():
         loop_(nullptr),
-        thread_(new Thread(runInThread),
+        thread_(new Thread(bind(&ThreadLoop::runInThread, this))),
         mutex_(),
         cond_(mutex_),
         state_(kRun)
@@ -36,7 +39,7 @@ class ThreadLoop
     void start()
     {
         state_ = kRun;
-        thread_.start();
+        thread_->start();
         MutexGuard mutex(mutex_);
         while (loop_ == nullptr)
         {
@@ -74,6 +77,6 @@ class ThreadLoop
     Mutex mutex_;
     Condition cond_;
     enum {kRun, kQuit} state_;
-}
+};
 
 #endif

@@ -1,9 +1,11 @@
 #ifndef __THREADLOOPPOOL_H__
 #define __THREADLOOPPOOL_H__
 
+#include "Eventloop.h"
 #include "ThreadLoop.h"
 
 using namespace std;
+using namespace net;
 
 class ThreadLoopPool
 {
@@ -26,12 +28,12 @@ class ThreadLoopPool
         state_ = kRun;
         for (int i = 0; i < threadnums_; i++)
         {
-            threads_.push_back(new ThreadLoop());
+            threads_.push_back(unique_ptr<ThreadLoop>(new ThreadLoop() ) );
         }
-        for (auto thread : threads_)
+        for (auto &thread : threads_)
         {
             thread->start();
-            EventLoop loop = nullptr;
+            Eventloop *loop = nullptr;
             loop = thread->getLoop();
             if (loop)
                 loops_.push_back(loop);
@@ -42,9 +44,9 @@ class ThreadLoopPool
         }
     }
 
-    EventLoop *getNextLoop()
+    Eventloop *getNextLoop()
     {
-        EventLoop *loop;
+        Eventloop *loop;
         if (!loops_.empty())
         {
             loop = loops_[next_];
@@ -67,17 +69,17 @@ class ThreadLoopPool
         return loop;
     }
 
-    vector<EventLoop *> *getLoops()
+    vector<Eventloop *> *getLoops()
     {
         return &loops_;
     }
 
     private:
     vector<unique_ptr<ThreadLoop> > threads_;
-    vector<EventLoop *> loops_;
+    vector<Eventloop *> loops_;
     size_t threadnums_;
     size_t next_;
     enum {kRun, kQuit, kInit} state_;
-}
+};
 
 #endif

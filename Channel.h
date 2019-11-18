@@ -4,9 +4,10 @@
 
 #include <functional>
 #include <sys/epoll.h>
+#include <memory>
 #include "Noncopyable.h"
 
-
+class Connection;
 namespace net
 {
 class Eventloop;
@@ -14,7 +15,7 @@ class Channel: base::noncopyable
 {
     public:
     Channel(int fd, Eventloop *loop);
-    ~Channel(){}//TODO
+    ~Channel();//TODO
     void enableRead(){event_ |= EPOLLIN; update();}
     void enableWrite(){event_ |= EPOLLOUT; update();}
     void disableRead(){event_ &= ~EPOLLIN; update();}
@@ -37,6 +38,8 @@ class Channel: base::noncopyable
     Eventloop *getLoop(){return loop_;}
     //TODO 
     bool exist;//用于标记channel在epoll中是否已存在
+    bool waitToWrite(){return event_ & EPOLLOUT; }
+    void bindConn(std::shared_ptr<Connection> conn);
 
     private:
     int fd_;
@@ -45,10 +48,12 @@ class Channel: base::noncopyable
     int revent_;//poller返回的活跃事件
     std::function<void()> readCallback_;
     std::function<void()> writeCallback_;
+    std::function<void()> closeCallback_;
     std::function<void()> errCallback_;
-    std::function<void ()> closeCallback_;
     Eventloop *loop_;//主要用于accepor这样没有连接的类,同时方便更新事件
-};  
+    std::weak_ptr<Connection> conn_;
+    bool binded_;
+};
 
 }
 

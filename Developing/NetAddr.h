@@ -44,6 +44,14 @@ using namespace std;
         {
             addr_ = addr;
         }
+
+        string toString()
+        {
+            char buf[128] = {0};
+            sprintf(buf, "%d", getPort());
+            return getIp() + ":" + string(buf);
+        }
+
         private:
         sockaddr_in addr_;
     };

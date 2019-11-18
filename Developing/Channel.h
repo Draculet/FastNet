@@ -28,6 +28,8 @@ class Channel: base::noncopyable
     //TODO 改成移动
     void setReadCallback(std::function<void()> readCallback){readCallback_ = readCallback;}
     void setWriteCallback(std::function<void()> writeCallback){writeCallback_ = writeCallback;}
+    void setCloseCallback(std::function<void()> closeCallback){closeCallback_ = closeCallback;}
+    void setErrorCallback(std::function<void()> errCallback){errCallback_ = errCallback;}
     //TODO void setConnection(std::shared_ptr<Connection> ptr){connptr_ = ptr;}
     void setRevent(int event){revent_ = event;}
     int getEvent(){return event_;}
@@ -36,7 +38,7 @@ class Channel: base::noncopyable
     Eventloop *getLoop(){return loop_;}
     //TODO 
     bool exist;//用于标记channel在epoll中是否已存在
-    bool waitToWrite(){return event & EPOLLOUT; }
+    bool waitToWrite(){return event_ & EPOLLOUT; }
 
     private:
     int fd_;

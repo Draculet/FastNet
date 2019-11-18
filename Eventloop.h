@@ -27,7 +27,8 @@ namespace net
         void insertQueue(std::function<void()>);//将任务插入任务队列
         void runInloop(std::function<void()>);//跨线程调用核心
         bool inloop(){return tid_ == base::gettid();}
-        void wakeup();
+        void wakeUp();
+        int getWakeupFd();
         void handleRead();
         //TODO connectionList connlist;
         channelList activelist;
@@ -39,7 +40,7 @@ namespace net
         //TODO quit_用atomic<bool>
 
         int wakeFd_;
-        unique_ptr<Channel> wakechan_;
+        std::unique_ptr<Channel> wakechan_;
         Mutex mutex_;
     };
 }

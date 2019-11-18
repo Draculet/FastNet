@@ -16,6 +16,7 @@ struct trData
     {
 
     }
+    
     void run()
     {
         runInThread();

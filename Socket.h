@@ -43,7 +43,7 @@ class Socket : base::noncopyable
     ~Socket()
     {
         ::close(fd_);
-        printf("socket close");
+        printf("*debug* socket close\n");
     }
 
     void setNonBlock()

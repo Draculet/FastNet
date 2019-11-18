@@ -30,6 +30,9 @@ void Channel::handleEvent()
     //debug 
     //printf("I am In Channel::handleEvent\n");
     shared_ptr<Connection> conn;
+    //下列函数都含有connection的裸指针,调用前需要先绑定所属Connection
+    //一则保护Connection调用期间安全
+    //二则防止Connection调用前以析构
     conn = conn_.lock();
     if (conn)
     {
