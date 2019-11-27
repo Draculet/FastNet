@@ -19,6 +19,7 @@ Eventloop::Eventloop():
     mutex_()
 {
     wakechan_->setReadCallback(bind(&Eventloop::handleRead, this));
+    printf("*debug* wakeupchannel add\n");
     wakechan_->enableRead();
 }
 

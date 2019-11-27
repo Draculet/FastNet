@@ -28,7 +28,8 @@ void onRead(Buffer *buf, shared_ptr<Connection> conn)
         for (int i = 0; i < reqhead_.size(); i++)
         {
             resp r = reqhead_.reqs[i].toResp("webapp");
-            conn->send(r.resptr_, r.len_);
+            string data = string(r.resptr_, r.len_);
+            conn->send(data);
             //printf("send %d bytes\n", r.len_);
         }
     }

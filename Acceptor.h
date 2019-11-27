@@ -27,6 +27,12 @@ class Acceptor : base::noncopyable
         ::close(extraFd_);
     }
 
+    //DEBUG用
+    int getAcceptFd()
+    {
+        return acceptsoc_->getFd();
+    }
+
     void setNewConnCallback(function<void (int, NetAddr&)> newConnCallback)
     {
         newConnCallback_ = newConnCallback;
@@ -36,6 +42,7 @@ class Acceptor : base::noncopyable
     {
         acceptchan_->setReadCallback(bind(&Acceptor::handleRead, this));
         acceptsoc_->listen();
+        printf("*debug* accept channel add\n");
         acceptchan_->enableRead();
     }
 

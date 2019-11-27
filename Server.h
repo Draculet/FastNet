@@ -26,9 +26,14 @@ class Server : base::noncopyable
         
     }
 
+    int getAcceptFd()
+    {
+        return acceptor_->getAcceptFd();
+    }
     //不能跨线程调用,同步执行
     void start()
     {
+        printf("*debug* Server Start\n");
         acceptor_->listen();
         //不用担心丢失连接请求,测试见~/netDesign/epollTest/epollTest2.cc
         pool_->start();
@@ -39,12 +44,15 @@ class Server : base::noncopyable
     {
         testPrint();
         printf("*debug* handleNewConn\n");
+        printf("New Connection Fd %d\n", sockfd);
         Eventloop *loop = pool_->getNextLoop();
         if (loop)
             printf("*debug* getloop\n");
         shared_ptr<Connection> conn(new Connection(sockfd, addr, loop));
         //connlist.push_back(conn);
         connMap_[addr.toString()] = conn;
+        conn->setConnCallback(connCallback_);
+        conn->setDisConnCallback(disConnCallback_);
         conn->setReadCallback(readCallback_);
         if (writeFinishCallBack_)
         {
@@ -75,6 +83,16 @@ class Server : base::noncopyable
     {
         return &*loop_;
     }
+    
+    void setConnCallback(function<void (shared_ptr<Connection>)> connCallback)
+    {
+        connCallback_ = connCallback;
+    }
+
+    void setDisConnCallback(function<void (shared_ptr<Connection>)> disConnCallback)
+    {
+        disConnCallback_ = disConnCallback;
+    }
 
     void setReadCallback(function<void (Buffer *, shared_ptr<Connection>) > readCallback)
     {
@@ -100,12 +118,19 @@ class Server : base::noncopyable
         }
     }
 
+    Eventloop *getNextLoop()
+    {
+        return pool_->getNextLoop();
+    }
+
     private:
     unique_ptr<Eventloop> loop_;
     unique_ptr<ThreadLoopPool> pool_;
     unique_ptr<Acceptor> acceptor_;
     //vector<shared_ptr<Connection> > connlist;//TODO 改成map<>
     map<string, shared_ptr<Connection> > connMap_;
+    function<void (shared_ptr<Connection>) > connCallback_;
+    function<void (shared_ptr<Connection>) > disConnCallback_;
     function<void (Buffer *, shared_ptr<Connection>)> readCallback_;
     function<void ()> writeFinishCallBack_;
     

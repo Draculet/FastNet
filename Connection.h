@@ -39,7 +39,7 @@ class Connection : base::noncopyable, public std::enable_shared_from_this<Connec
         printf("*debug* ~Connection fd %d\n", soc_->getFd());
     }
 
-    void handleEstablish()
+    void handleEstablish()//本线程同步调用
     {
         printf("*debug* hanleEstablish %d\n", gettid());
         state_ = kConnected;
@@ -52,6 +52,8 @@ class Connection : base::noncopyable, public std::enable_shared_from_this<Connec
         chan_->setErrorCallback(bind(&Connection::handleError, this));
         chan_->bindConn(shared_from_this());
         chan_->enableRead();
+        if (connCallback_)
+            connCallback_(shared_from_this());
         //TODO 日志输出
     }
     /*
@@ -61,7 +63,7 @@ class Connection : base::noncopyable, public std::enable_shared_from_this<Connec
     void handleRead()
     {
         long ret = inputbuffer_.readFd(soc_->getFd());
-        printf("*debug* readFd ret %d\n",ret);
+        printf("*debug* Fd %d readFd ret %d\n", soc_->getFd(), ret);
         if (ret > 0)
         {
             if (readCallback_)
@@ -128,9 +130,11 @@ class Connection : base::noncopyable, public std::enable_shared_from_this<Connec
         printf("*debug* handleClose()\n");
         state_ = kClosed;
         chan_->disableAll();
+        if (disConnCallback_)
+            disConnCallback_(shared_from_this() );
         //此时channel已被Poller移除
         //TODO 是否为了效率在Poller中暂时保存?
-        closeCallback_(shared_from_this() );
+        closeCallback_(shared_from_this() ); //使主线程去删除连接
         //在主线程中移除连接,注意保护Connection,防止提前析构
         //在主线程移除连接之后应正常Connection析构,生命周期结束
         /*
@@ -139,11 +143,26 @@ class Connection : base::noncopyable, public std::enable_shared_from_this<Connec
         //sleep(1);
     }
 
+    /*
     int send(string str)
     {
         return send(str.c_str(), str.size());
     }
+    */
 
+    int send(string str)
+    {
+        if (loop_->inloop())
+            return sendData(str);
+        else
+        {
+            loop_->insertQueue(bind(&Connection::sendData, shared_from_this(), str) );
+            //TODO 返回-1较突兀
+            return -1;
+        }
+    }
+
+    /*
     int send(const char *data, size_t len)
     {
         if (loop_->inloop())
@@ -151,19 +170,33 @@ class Connection : base::noncopyable, public std::enable_shared_from_this<Connec
         else
         {
             loop_->insertQueue(bind(&Connection::sendData, shared_from_this(), data, len) );
+            for (int i = 0; i < len; i++)
+            {
+                printf("=============Debug2==================\n");
+                printf("%d%c  ", data[i], data[i]);
+            }
             //TODO 返回-1较突兀
             return -1;
         }
     }
+    */
     
-    //重点测试该部分
-    //return remain
-    size_t sendData(const char *data, size_t len)
+    //string版本
+    size_t sendData(string str)
     {
+        const char *data = str.c_str(); 
+        size_t len = str.size();
         int remain = len;
         //没有待发送数据,直接发送
         if (outputbuffer_.readable() == 0 && !chan_->waitToWrite() )//TODO 条件是否充足
         {
+
+            /*for (int i = 0; i < len; i++)
+            {
+                printf("=============Debug==================\n");
+                printf("%d%c  ", data[i], data[i]);
+            }*/
+
             int haswrite = ::write(soc_->getFd(), data, len);
             printf("*debug* write %d bytes in sendData\n", haswrite);
             if (haswrite < 0)
@@ -226,10 +259,101 @@ class Connection : base::noncopyable, public std::enable_shared_from_this<Connec
         return remain;
     }
 
+    //该版本用于传string时有错误
+    //重点测试该部分
+    //return remain
+    /*
+    size_t sendData(const char *data, size_t len)
+    {
+        int remain = len;
+        //没有待发送数据,直接发送
+        if (outputbuffer_.readable() == 0 && !chan_->waitToWrite() )//TODO 条件是否充足
+        {
+
+            for (int i = 0; i < len; i++)
+            {
+                printf("=============Debug==================\n");
+                printf("%d%c  ", data[i], data[i]);
+            }
+
+            int haswrite = ::write(soc_->getFd(), data, len);
+            printf("*debug* write %d bytes in sendData\n", haswrite);
+            if (haswrite < 0)
+            {
+                //TODO 日志输出EAGIN错误
+                printf("*debug* In Thread %d send ret -1\n", gettid());
+                outputbuffer_.append(data, len);
+                printf("*debug* Current bufsize: %d\n", outputbuffer_.readable());
+                remain = len;
+                chan_->enableWrite();
+            }
+            else if (haswrite == len)
+            {
+                if (chan_->waitToWrite())
+                {
+                    chan_->disableWrite();
+                }
+                printf("*debug* Write Finish\n");
+                if (writeFinishCallBack_)
+                {
+                    loop_->runInloop(bind(&Connection::writeFinishCallBack_, shared_from_this() ) );//注意保护Connection
+                }
+                remain = 0;
+            }
+            else if (haswrite >= 0 && haswrite < len)
+            {
+                printf("*debug* In Thread %d send unFinish\n", gettid());
+                //assert(haswrite < len && haswrite >= 0);
+                outputbuffer_.append(data + haswrite, len - haswrite);
+                printf("*debug* Current bufsize: %d\n", outputbuffer_.readable());
+                remain = len - haswrite;
+                chan_->enableWrite();
+            }
+            else
+            {
+                //TODO 出现错误
+                return -1;
+            }
+        }
+        else//缓冲区中还有数据待发送,将需要发送数据放入缓冲区尾部
+        {
+            if (outputbuffer_.readable() >= highWaterMark)
+            {
+                if (highWaterCallBack_)
+                {
+                    loop_->runInloop(bind(highWaterCallBack_, &outputbuffer_ ) );//注意保护Connection
+                }
+                else
+                {
+                    //TODO 默认丢掉数据
+                    printf("*debug* drop data %d bytes\n", outputbuffer_.readable());
+                    outputbuffer_.retrieveAll();
+                }
+            }
+            outputbuffer_.append(data, len);
+            printf("*debug* After Drop Current bufsize: %d\n", outputbuffer_.readable());
+            chan_->enableWrite();
+        }
+
+        return remain;
+    }
+    */
+
+    void setConnCallback(function<void (shared_ptr<Connection>)> connCallback)
+    {
+        connCallback_ = connCallback;
+    }
+
+    void setDisConnCallback(function<void (shared_ptr<Connection>)> disConnCallback)
+    {
+        disConnCallback_ = disConnCallback;
+    }
+
     void setReadCallback(function<void (Buffer *, shared_ptr<Connection>)> readCallback )
     {
         readCallback_ = readCallback;
     }
+
 
     void setCloseCallback(function<void (shared_ptr<Connection>)> closeCallback)
     {
@@ -246,6 +370,21 @@ class Connection : base::noncopyable, public std::enable_shared_from_this<Connec
         return *(soc_->getAddr());
     }
 
+    Channel *getChannel()
+    {
+        return &*chan_;
+    }
+
+    int getFd()
+    {
+        return soc_->getFd();
+    }
+
+    Eventloop *getLoop()
+    {
+        return loop_;
+    }
+    
     /*
         debug用
      */
@@ -268,6 +407,8 @@ class Connection : base::noncopyable, public std::enable_shared_from_this<Connec
     Eventloop * loop_;
     int highWaterMark;
     enum {kInit, kConnected, kClosed} state_;
+    function<void (shared_ptr<Connection>) > connCallback_;
+    function<void (shared_ptr<Connection>) > disConnCallback_;
     function<void (Buffer *, shared_ptr<Connection>)> readCallback_;
     function<void (shared_ptr<Connection>)> closeCallback_;
     function<void (Buffer *)> highWaterCallBack_;
