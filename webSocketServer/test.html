@@ -1,0 +1,97 @@
+<!DOCTYPE HTML>  
+<html>  
+<head>  
+    <meta http-equiv="content-type" content="text/html" />  
+    <meta name="author" content="https://github.com/jice1001" />  
+	<title>websocket test</title>  
+	<body>
+			<p>上传文件: <input type="file" name="file" id="fileSel"/></p>
+			<input id="msg" type="text" />
+			<button id="connect" onclick="Connect()">Connect</button>  
+			<button id="send" onclick="Send();">Send</button>  
+			<button id="close" onclick="Close();">Close</button>
+			
+	</body>  
+			
+    <script>
+		var socket;  
+		function Connect(){  
+			try{  
+				socket=new WebSocket('ws://127.0.0.1:8832');  
+			}catch(e){  
+				alert('error');
+				return;
+			}
+			socket.onopen = sOpen;  
+			socket.onerror = sError;
+			socket.onmessage= sMessage;
+			socket.onclose= sClose;
+		}  
+		function sOpen(){
+			alert('connect success!');
+		}
+		function sError(e){
+			alert("error " + e);
+		}
+		function sMessage(msg){  
+			alert('server says:' + msg.data);  
+		}
+		function sClose(e){
+			alert("connect closed:" + e.code);
+		}  
+		function Send(){
+			//var str = ;
+			socket.send(document.getElementById("msg").value);
+			/*
+			if (blob != null)
+			{
+				socket.send("\r\n\r\n" + file.name);
+				socket.send(blob);
+			}
+			*/
+		} 
+		function Close(){
+			socket.close();
+		}
+		function upload()
+		{
+			filename=document.getElementById("str_file").files[0];
+			alert(filename);
+		}
+		document.getElementById("msg").onchange = function()
+		{
+			alert(this.value);
+		}
+		var curLoad = 0;
+		var reader = null;
+		var file = null;
+		var blob = null;
+		document.getElementById("fileSel").onchange = function()
+		{
+			file = this.files[0];
+    		total = file.size;
+			alert("文件大小：" + file.size);
+			loadFile();
+		}
+		function loadFile()
+		{
+			cuLoaded = 0;
+    		reader = new FileReader();
+			reader.onload = function (e) 
+			{
+				alert('读取总数：' + e.loaded);
+			}
+			readBlob();
+		}
+		
+		function readBlob() {
+ 	   	//指定开始位置和结束位置读取文件
+    		blob = file.slice(cuLoaded, cuLoaded + file.size);
+   	 		reader.readAsArrayBuffer(blob);
+		}
+	</script>
+</head>  
+
+
+   
+</html>  

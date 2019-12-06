@@ -1,0 +1,181 @@
+<!DOCTYPE html>
+<html>
+<head>
+   <meta charset="utf-8">
+   <title>index</title>
+   <link href="https://cdn.staticfile.org/twitter-bootstrap/3.3.7/css/bootstrap.min.css" rel="stylesheet">
+   <script src="https://cdn.staticfile.org/jquery/2.0.0/jquery.min.js"></script>
+   <script src="https://cdn.staticfile.org/twitter-bootstrap/3.3.7/js/bootstrap.min.js"></script>
+   <style>
+       .container {
+
+        }
+        img{
+            width: 100%;
+        }
+        ul{
+            border: 0;
+        }
+        .tick{
+            text-align: center;
+        }
+        .tickimg{
+            width: 60px;
+            border-radius: 50%;
+            height: 57px;
+            background-color: #0BB20C;
+            margin: 20px auto 10px ;
+            position: relative;
+        }
+        .tickimg:after{
+            position: absolute;
+            content: '7';
+            font-size: 48px;
+            font-weight: bold;
+            color: #fff;
+            top: -6px;
+            left: 22px;
+            transform: rotateZ(-300deg) rotateX(-180deg) ;
+            -webkit-transform:rotateZ(-300deg) rotateX(-180deg);
+        }
+        p{
+            margin: 10px 0;
+        }
+        .mark{
+            font-size: 16px;
+            color: #808080;
+            padding: .2em 0;
+        }
+        .des-label{
+            width: 100px;
+            text-align: right;
+            font-size: 16px;
+            font-weight: bolder;
+            color: #808080;
+            display: inline-block;
+        }
+        .list-group-item{
+            border: 0;
+        }
+
+        .background
+        {
+            background:white;
+        }
+        select{
+            -webkit-appearance: none;
+            height: 32px;
+            border-radius: 5px;
+            border: 1px solid #ddd;
+            text-align: center;
+            padding: 0 10px;
+        }
+    </style>
+</head>
+<body class="background">
+    <nav class="navbar navbar-inverse" role="navigation">
+        <div class="container">
+            <div class="navbar-header">
+                <a href="#" class="navbar-brand">科技馆</a>
+            </div>
+            <div class="collapse navbar-collapse">
+                <ul class="nav navbar-nav">
+                    <li class="active"><a href="index.html">网上购物</a></li>
+                    <li ><a href="manage.html">管理入口</a></li>
+                    <li ><a href="user.html">个人中心</a></li>
+                </ul>
+            </div>
+        </div>
+    </nav>
+
+    <nav class="navbar" role="navigation">
+        <div class="container">
+            <div class="btn-group col-md-7">
+                    <button class="btn btn-default btn-lg dropdown-toggle" type="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                    网页导航<span class="caret"></span>
+                    </button>
+                    <ul class="dropdown-menu">
+                            <li><a href="index.html">首页</a></li>
+                            <li><a href="itemShow.html">购物中心</a></li>
+                            <li><a href="user.html">个人中心</a></li>
+                            <li role="separator" class="divider"></li>
+                            <li><a href="#">关于科技馆</a></li>
+                    </ul>
+            </div>
+
+            <div class="col-md-4">
+                <div class="input-group">
+                    <input type="text" class="form-control" autofocus placeholder="Search for...">
+                      <span class="input-group-btn">
+                        <button class="btn" type="button"><span class="glyphicon glyphicon-search" aria-hidden="true"></span></button>
+                      </span>
+                </div>
+            </div>
+        </div>
+    </nav>
+
+        <div class="container">
+                <div class="row">
+                    <div class="col-md-offset-2 col-sm-7">
+                        <div class="tick">
+                            <div class="tickimg"></div>
+                            <p>购买成功</p>
+                        </div>
+                        <ul  style="margin-top: 10px" class="list-group">
+                            <li class="list-group-item">
+                                <p  class="mark">
+                                    <span class="des-label">订单号：</span>
+                                    <span>xxxxxxxxxxxxxxxxxxx</span>
+                                </p>
+                                <p>
+                                    <span class="des-label">商品名称：</span>
+                                    <span>xxxxxxxxxxxxxxxxxxxx</span>
+                                </p>
+                                <p>
+                                    <span class="des-label">商品名称：</span>
+                                    <span>xxxxxxxxxxxxxxxxxxxxx</span>
+                                </p>
+                            </li>
+                        </ul>
+                        <button type="button" class="btn btn-danger btn-lg col-md-offset-4 col-sm-3" onclick="window.location.href='index.html'">继续购物</button>
+                    </div>
+                </div>
+            </div>
+
+        
+
+<div style="float:left;">
+    <p>&nbsp</p>
+    <p>&nbsp</p>
+    <p>&nbsp</p>
+    <p>&nbsp</p>
+</div>
+<div style=float:left">
+    <hr />
+    <div class="alert" style="background:">
+        <div class="row">
+            <div class="col-md-3 col-md-offset-2">
+                <p><a href="">相关网站</a></p>
+                <p><a href="">相关网站</a></p>
+                <p><a href="">相关网站</a></p>
+            </div>
+             <div class="col-md-3">
+                <p><a href="">相关网站</a></p>
+                <p><a href="">相关网站</a></p>
+                <p><a href="">相关网站</a></p>
+            </div>
+             <div class="col-md-3">
+                <p><a href="">相关网站</a></p>
+                <p><a href="">相关网站</a></p>
+                <p><a href="">相关网站</a></p>
+            </div>
+        </div>
+    </div>
+    <hr />
+    <p class="container"></p>
+</div>
+
+
+
+</body>
+</html>
