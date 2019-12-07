@@ -245,7 +245,11 @@ class webSocketCodec
             memset(curMaskBuf, 0, 4);
             //webSocketCodec::key = "258EAFA5-E914-47DA-95CA-C5AB0DC85B11";
         }
-            
+        ~webSocketCodec()
+        {
+            printf("*debug* ~webSocketCodec\n");
+        } 
+
         static bool isWebSocket(requestHeader *header)
         {
             auto iter = header->getKV()->find("Sec-WebSocket-Key");
@@ -399,7 +403,7 @@ class webSocketCodec
                 return true;
             }
 
-            if (buf_->readable() > 6)//最短frame 6 bytes,浏览器发送的包默认带掩码
+            if (buf_->readable() >= 6)//最短frame 6 bytes,浏览器发送的包默认带掩码
             {
                 printf("*debug* 解析开始\n");
                 curFin = (unsigned char)*(buf_->current()) >> 7;

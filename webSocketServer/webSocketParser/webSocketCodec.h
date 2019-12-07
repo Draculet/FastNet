@@ -1,6 +1,3 @@
-#ifndef __WEB_SOCKET_CODEC_H__
-#define __WEB_SOCKET_CODEC_H__
-
 #include "sha1.h"
 #include "base64.h"
 #include <string>
@@ -231,8 +228,7 @@ class webSocketCodec
 {
     public:
         webSocketCodec(Buffer *buf)
-            :frames(),
-            buf_(buf),
+            :buf_(buf),
             kfin(true),
             klenfin(true),
             kmaskfin(true),
@@ -521,5 +517,3 @@ class webSocketCodec
         uint64_t curPayloadLen;
         char curMaskBuf[4];
 };
-
-#endif
