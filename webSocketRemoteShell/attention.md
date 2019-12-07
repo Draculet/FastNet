@@ -1,0 +1,2 @@
+* 程序使用的loginEXE仍是remoteShellv2中的loginEXE
+* loginEx需要先编译为可执行文件,用于server fork之后exec
