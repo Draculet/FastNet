@@ -190,8 +190,8 @@ class ShellServer
         ptspool_.retBack( connfdMap_[conn]->getFd() );
         connfdMap_[conn]->getChannel()->disableAll();
         //chan_->disableAll();
-        int fd = 3;
-        printf("Connection Use_Count2 %d\n", ptsMap_[fd].use_count());
+        //int fd = 3;
+        //printf("Connection Use_Count2 %d\n", ptsMap_[fd].use_count());
 
         MutexGuard m(mutex_);
 
@@ -202,7 +202,7 @@ class ShellServer
         if (iter != connfdMap_.end())
             connfdMap_.erase(iter);
         
-        printf("Connection Use_Count %d\n", ptsMap_[fd].use_count());
+        //printf("Connection Use_Count %d\n", ptsMap_[fd].use_count());
         //此时conn析构,注意在conn的析构会导致mfd被socekt析构时close
     }
 
@@ -247,7 +247,6 @@ class ShellServer
             fdconn->getLoop()->runInloop( bind(&Channel::enableRead, fdconn->getChannel() ) );
         }
 
-        
     }
 
     void onRead(Buffer *buf, shared_ptr<Connection> conn)
@@ -260,7 +259,10 @@ class ShellServer
 
     void doRemoveConn()
     {
-        printf("pts不会主动退出,需在来访连接断开时收尾!!\n");
+        printf("错误,pts不会主动close\n");
+        //由于pts不会主动close,所以该函数空置
+        //如果对端会主动主动close,则此处应加上connfdMap_.erase
+        //因为移除client连接的操作在onDisConnection中执行了
     }
 
     void start()

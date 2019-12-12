@@ -260,6 +260,7 @@ class ShellServer
         
     }
 
+    //TODO 双方的onRead整合在一起,可以选择将pts的onRead和conn的onRead的分开
     void onRead(Buffer *buf, shared_ptr<Connection> conn)
     {
         shared_ptr<webSocketCodec> codec;
@@ -347,7 +348,6 @@ int main(void)
     ShellServer serv;
     sleep(1);
     serv.start();
-
     //PtsPool pts;
     //pts.init();
     /* 

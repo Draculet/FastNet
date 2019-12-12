@@ -148,7 +148,11 @@ namespace net
             printf("*debug* readv ret %d\n", n);
             if (n <= 0)
             {
-                perror("readFd");
+                if (n < 0)
+                {
+                    perror("readFd");
+                }
+                
                 return n;
             }
             else if (n <= writable())
