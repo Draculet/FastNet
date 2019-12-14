@@ -299,9 +299,23 @@ class ShellServer
                 {
                     codec->frames[i].debugPrint();
                     printf("\n");
-                    cout << "To Pts:\n" << codec->frames[i].getMessege() << endl;
-                    if (codec->frames[i].getMessege().size() != 0)
-                        connfdMap_[conn]->send(codec->frames[i].getMessege() + "\n");
+                    if (codec->frames[i].getOpcode() == 1)
+                    {
+                        cout << "To Pts:\n" << codec->frames[i].getMessege() << endl;
+                        if (codec->frames[i].getMessege().size() != 0)
+                            connfdMap_[conn]->send(codec->frames[i].getMessege() + "\n");
+                    }
+                    else if (codec->frames[i].getOpcode() == 8)
+                    {
+
+                    }
+                    else if (codec->frames[i].getOpcode() == 9)
+                    {
+                        //心跳帧
+                        string data = "PONG";
+                        printf("*debug* Pong");
+                        conn->send(frame::toFrame(data, 10));
+                    }
                     //codec->frames[i].debugPrint();
                     //conn->send(frame::toFrameWithMask(codec->frames[i].getMessege(), 1, mark));
                 }
