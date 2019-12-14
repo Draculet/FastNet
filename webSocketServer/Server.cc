@@ -9,12 +9,14 @@
 using namespace http;
 
 void onRead(map<shared_ptr<Connection>, webSocketCodec *> *codecMap, Buffer *buf, shared_ptr<Connection> conn);
+void onDisConnect(map<shared_ptr<Connection>, webSocketCodec *> *codecMap, shared_ptr<Connection> conn);
 
 int main(void)
 {
     Server s(4, 8832);
     map<shared_ptr<Connection>, webSocketCodec *> codecMap;
     s.setReadCallback(bind(onRead, &codecMap,  placeholders::_1, placeholders::_2 ));
+    s.setDisConnCallback( bind(onDisConnect, &codecMap, placeholders::_1) );
     s.start();
 }
 
@@ -33,6 +35,15 @@ uint64_t ntoh64(uint64_t &input)
     uint64_t res;
     memcpy(&res, arr, 8);
     return res;
+}
+
+void onDisConnect(map<shared_ptr<Connection>, webSocketCodec *> *codecMap, shared_ptr<Connection> conn)
+{
+    auto iter = codecMap->find(conn);
+    if (iter != codecMap->end())
+    {
+        codecMap->erase(iter);
+    }
 }
 
 void onRead(map<shared_ptr<Connection>, webSocketCodec *> *codecMap, Buffer *buf, shared_ptr<Connection> conn)

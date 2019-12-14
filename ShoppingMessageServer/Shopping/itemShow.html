@@ -1,0 +1,427 @@
+<!DOCTYPE html>
+<html>
+<head>
+   <meta charset="utf-8">
+   <title>index</title>
+   <link href="https://cdn.staticfile.org/twitter-bootstrap/3.3.7/css/bootstrap.min.css" rel="stylesheet">
+   <script src="https://cdn.staticfile.org/jquery/2.0.0/jquery.min.js"></script>
+   <script src="https://cdn.staticfile.org/twitter-bootstrap/3.3.7/js/bootstrap.min.js"></script>
+
+
+   <style>
+        .background
+        {
+            background:white;
+        }
+    </style>
+</head>
+<body class="background">
+    <nav class="navbar navbar-inverse" role="navigation">
+        <div class="container">
+            <div class="navbar-header">
+                <a href="#" class="navbar-brand">科技馆</a>
+            </div>
+            <div class="collapse navbar-collapse">
+                <ul class="nav navbar-nav">
+                    <li class="active"><a href="#">网上购物</a></li>
+                    <li ><a href="#">管理入口</a></li>
+                    <li ><a href="user.html">个人中心</a></li>
+                </ul>
+            </div>
+        </div>
+    </nav>
+
+    <nav class="navbar" role="navigation">
+      <div class="container">
+          <div class="btn-group col-md-7">
+                  <button class="btn btn-default btn-lg dropdown-toggle" type="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                  网页导航<span class="caret"></span>
+                  </button>
+                  <ul class="dropdown-menu">
+                          <li><a href="index.html">首页</a></li>
+                          <li><a href="itemShow.html">购物中心</a></li>
+                          <li><a href="user.html">个人中心</a></li>
+                          <li role="separator" class="divider"></li>
+                          <li><a href="#">关于科技馆</a></li>
+                  </ul>
+          </div>
+
+          <div class="col-md-4">
+              <div class="input-group">
+                  <input type="text" class="form-control" autofocus placeholder="Search for...">
+                    <span class="input-group-btn">
+                      <button class="btn" type="button"><span class="glyphicon glyphicon-search" aria-hidden="true"></span></button>
+                    </span>
+              </div>
+          </div>
+      </div>
+  </nav>
+
+
+
+        <div class="container" >
+            <div class="alert" style="background: white">
+                <div class="row">
+                    <div class="col-md-12">
+                        <ul class="nav nav-tabs" role="tablist">
+                            <li role="presentation" class="active"><a href="#home" aria-controls="home" role="tab" data-toggle="tab">手机</a></li>
+                            <li role="presentation"><a href="#profile" aria-controls="profile" role="tab" data-toggle="tab">电脑</a></li>
+                            <li role="presentation"><a href="#messages" aria-controls="messages" role="tab" data-toggle="tab">数码</a></li>
+                        </ul>
+                        <!-- Tab panes -->
+                        <div class="tab-content">
+                            <div role="tabpanel" class="tab-pane active" id="home">
+                                    <div class="container">
+                                            <p>&nbsp;</p><p>&nbsp;</p>
+                                            <div id="toAdd" class="row">
+                                                    <div class="col-md-3">
+                                                      <div class="thumbnail">
+                                                        <img src="sj1.jpg" alt="..." width="200px">
+                                                        <div class="caption">
+                                                          <h4>三星Galaxy</h4>
+                                                          <p>￥4000</p>
+                                                          <p><a href="shopping.html" class="btn btn-danger" role="button">现在购买</a>&nbsp;&nbsp;&nbsp;&nbsp;<a href="shopping.html" class="btn btn-default" role="button">详情</a></p>
+                                                        </div>
+                                                      </div>
+                                                    </div>
+                                
+                                                    <div class="col-md-3">
+                                                            <div class="thumbnail">
+                                                              <img src="sj2.jpg" alt="..." width="200px">
+                                                              <div class="caption">
+                                                                <h4>iphone</h4>
+                                                                <p>￥9000</p>
+                                                                <p><a href="shopping.html" class="btn btn-danger" role="button">现在购买</a>&nbsp;&nbsp;&nbsp;&nbsp;<a href="shopping.html" class="btn btn-default" role="button">详情</a></p>
+                                                              </div>
+                                                            </div>
+                                                    </div>
+                                
+                                                    <div class="col-md-3">
+                                                            <div class="thumbnail">
+                                                              <img src="sj3.jpg" alt="..." width="200px">
+                                                              <div class="caption">
+                                                                <h4>华为</h4>
+                                                                <p>￥4000</p>
+                                                                <p><a href="shopping.html" class="btn btn-danger" role="button">现在购买</a>&nbsp;&nbsp;&nbsp;&nbsp;<a href="shopping.html" class="btn btn-default" role="button">详情</a></p>
+                                                              </div>
+                                                            </div>
+                                                    </div>
+                                
+                                                    <div class="col-md-3">
+                                                            <div class="thumbnail">
+                                                              <img src="sj3.jpg" alt="..." width="200px">
+                                                              <div class="caption">
+                                                                <h4>华为</h4>
+                                                                <p>￥4000</p>
+                                                                <p><a href="shopping.html" class="btn btn-danger" role="button">现在购买</a>&nbsp;&nbsp;&nbsp;&nbsp;<a href="shopping.html" class="btn btn-default" role="button">详情</a></p>
+                                                              </div>
+                                                            </div>
+                                                    </div>
+                                
+                                
+                                            </div>
+                                    </div>
+                            </div>
+
+
+                            <div role="tabpanel" class="tab-pane" id="profile">
+                                    <div class="container">
+                                        <p>&nbsp;</p><p>&nbsp;</p>
+                                            <div id="toAdd" class="row">
+                                                    <div class="col-md-3">
+                                                      <div class="thumbnail">
+                                                        <img src="dn1.jpg" alt="..." width="200px">
+                                                        <div class="caption">
+                                                          <h4>微软surface</h4>
+                                                          <p>￥4000</p>
+                                                          <p><a href="#" class="btn btn-danger" role="button">现在购买</a>&nbsp;&nbsp;&nbsp;&nbsp;<a href="#" class="btn btn-default" role="button">详情</a></p>
+                                                        </div>
+                                                      </div>
+                                                    </div>
+                                
+                                                    <div class="col-md-3">
+                                                            <div class="thumbnail">
+                                                              <img src="dn2.jpg" alt="..." width="200px">
+                                                              <div class="caption">
+                                                                <h4>华硕ASUS</h4>
+                                                                <p>￥5000</p>
+                                                                <p><a href="#" class="btn btn-danger" role="button">现在购买</a>&nbsp;&nbsp;&nbsp;&nbsp;<a href="#" class="btn btn-default" role="button">详情</a></p>
+                                                              </div>
+                                                            </div>
+                                                    </div>
+                                
+                                                    <div class="col-md-3">
+                                                            <div class="thumbnail">
+                                                              <img src="dn4.jpg" alt="..." width="200px">
+                                                              <div class="caption">
+                                                                <h4>极米投影仪</h4>
+                                                                <p>￥4000</p>
+                                                                <p><a href="#" class="btn btn-danger" role="button">现在购买</a>&nbsp;&nbsp;&nbsp;&nbsp;<a href="#" class="btn btn-default" role="button">详情</a></p>
+                                                              </div>
+                                                            </div>
+                                                    </div>
+                                
+                                                    <div class="col-md-3">
+                                                            <div class="thumbnail">
+                                                              <img src="dn3.jpg" alt="..." width="200px">
+                                                              <div class="caption">
+                                                                <h4>联想拯救者</h4>
+                                                                <p>￥11000</p>
+                                                                <p><a href="#" class="btn btn-danger" role="button">现在购买</a>&nbsp;&nbsp;&nbsp;&nbsp;<a href="#" class="btn btn-default" role="button">详情</a></p>
+                                                              </div>
+                                                            </div>
+                                                    </div>
+                                
+                                
+                                            </div>
+                                    </div>
+                            </div>
+
+
+                            <div role="tabpanel" class="tab-pane" id="messages">
+                                    <div class="container">
+                                            <p>&nbsp;</p><p>&nbsp;</p>
+                                                <div id="toAdd" class="row">
+                                                        <div class="col-md-3">
+                                                          <div class="thumbnail">
+                                                            <img src="sm1.jpg" alt="..." width="200px">
+                                                            <div class="caption">
+                                                              <h4>尼康D5单反</h4>
+                                                              <p>￥43799</p>
+                                                              <p><a href="#" class="btn btn-danger" role="button">现在购买</a>&nbsp;&nbsp;&nbsp;&nbsp;<a href="#" class="btn btn-default" role="button">详情</a></p>
+                                                            </div>
+                                                          </div>
+                                                        </div>
+                                    
+                                                        <div class="col-md-3">
+                                                                <div class="thumbnail">
+                                                                  <img src="sm2.jpg" alt="..." width="200px">
+                                                                  <div class="caption">
+                                                                    <h4>索尼32GB存储卡</h4>
+                                                                    <p>￥50</p>
+                                                                    <p><a href="#" class="btn btn-danger" role="button">现在购买</a>&nbsp;&nbsp;&nbsp;&nbsp;<a href="#" class="btn btn-default" role="button">详情</a></p>
+                                                                  </div>
+                                                                </div>
+                                                        </div>
+                                    
+                                                        <div class="col-md-3">
+                                                                <div class="thumbnail">
+                                                                  <img src="sm3.jpg" alt="..." width="200px">
+                                                                  <div class="caption">
+                                                                    <h4>万利浦W5手环</h4>
+                                                                    <p>￥188</p>
+                                                                    <p><a href="#" class="btn btn-danger" role="button">现在购买</a>&nbsp;&nbsp;&nbsp;&nbsp;<a href="#" class="btn btn-default" role="button">详情</a></p>
+                                                                  </div>
+                                                                </div>
+                                                        </div>
+                                    
+                                                        <div class="col-md-3">
+                                                                <div class="thumbnail">
+                                                                  <img src="sm4.jpg" alt="..." width="200px">
+                                                                  <div class="caption">
+                                                                    <h4>Apple Watch智能手表</h4>
+                                                                    <p>￥3199</p>
+                                                                    <p><a href="#" class="btn btn-danger" role="button">现在购买</a>&nbsp;&nbsp;&nbsp;&nbsp;<a href="#" class="btn btn-default" role="button">详情</a></p>
+                                                                  </div>
+                                                                </div>
+                                                        </div>
+                                    
+                                    
+                                                </div>
+                                        </div>
+
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            </div>
+
+
+        
+        <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#myModal">
+          新增商品
+      </button>
+
+      <!-- Modal -->
+      <div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+      <div class="modal-dialog" role="document">
+          <div class="modal-content">
+          <div class="modal-header">
+              <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+              <h4 class="modal-title" id="myModalLabel">新增商品</h4>
+          </div>
+          <div class="modal-body">
+              <div>
+                <div class="input-group input-group">
+                  <span class="input-group-addon">商品名称</span>
+                  <input type="text" id="itemname" class="form-control" placeholder="Username" aria-describedby="sizing-addon1">
+                </div>
+                <span id="itemnflag" class="text-danger"></span>
+
+                <p>&nbsp;</p>
+                <div class="input-group input-group">
+                  <span class="input-group-addon">价格</span>
+                  <input type="text" id="itemprice" class="form-control" placeholder="Username" aria-describedby="sizing-addon1">
+                </div>
+                <span id="itempflag" class="text-danger"></span>
+
+                <p>&nbsp;</p>
+                <div class="input-group input-group">
+                  <span class="input-group-addon" >图片名</span>
+                  <input type="text" id="itempic" class="form-control" placeholder="Username" aria-describedby="sizing-addon1">
+                </div>
+                <span id="itempicflag" class="text-danger"></span>
+
+
+              </div>
+          </div>
+          <div class="modal-footer">
+              <button type="button" id="itembutt" class="btn btn-default" onclick="checkAll()">新增</button>
+          </div>
+          </div>
+      </div>
+      </div>
+
+      <script>
+
+        //check function
+        function checkNULL(id)
+        {
+            var obj = document.getElementById(id);
+            if (obj.value == "" || obj.value == " ")
+              return true;
+            else
+              return false;
+
+        }
+
+        document.getElementById("itemname").onblur = checkItemName;
+            function checkItemName(){
+            if (checkNULL("itemname"))
+            {
+              document.getElementById("itemnflag").innerHTML = "&nbsp;&nbsp;&nbsp;&nbsp;<span class=\"glyphicon glyphicon-remove\" aria-hidden=\"true\">错误：商品名称不能为空</span>";
+              document.getElementById("itemname").focus();
+              return false;
+            }
+            else
+            {
+              document.getElementById("itemnflag").innerHTML = "&nbsp;&nbsp;&nbsp;&nbsp;<span class=\"glyphicon glyphicon-ok\" aria-hidden=\"true\"></span>";
+              return true;
+            }
+        }
+
+        document.getElementById("itemprice").onblur = checkItemPrice;
+            function checkItemPrice(){
+            var reg = /^[1-9][0-9]{0,10}(\.[0-9]{1,10})?$/;
+            if (checkNULL("itemprice"))
+            {
+              document.getElementById("itempflag").innerHTML = "&nbsp;&nbsp;&nbsp;&nbsp;<span class=\"glyphicon glyphicon-remove\" aria-hidden=\"true\">错误：商品价格不能为空</span>";
+              document.getElementById("itemprice").focus();
+              return false;
+            }
+            else if (!reg.test(document.getElementById("itemprice").value))
+            {
+              document.getElementById("itempflag").innerHTML = "&nbsp;&nbsp;&nbsp;&nbsp;<span class=\"glyphicon glyphicon-remove\" aria-hidden=\"true\">错误：商品价格格式错误</span>";
+              document.getElementById("itemprice").focus();
+              return false;
+            }
+            else
+            {
+              document.getElementById("itempflag").innerHTML = "&nbsp;&nbsp;&nbsp;&nbsp;<span class=\"glyphicon glyphicon-ok\" aria-hidden=\"true\"></span>";
+              return true;
+            }
+        }
+
+        document.getElementById("itempic").onblur = checkItemPic;
+            function checkItemPic(){
+            var reg = /^[a-zA-Z0-9_-]{1,10}\.(jpg|bmp|gif|ico|pcx|jpeg|tif|png|raw|tga)$/
+            if (checkNULL("itempic"))
+            {
+              document.getElementById("itempicflag").innerHTML = "&nbsp;&nbsp;&nbsp;&nbsp;<span class=\"glyphicon glyphicon-remove\" aria-hidden=\"true\">错误：商品名称不能为空</span>";
+              document.getElementById("itempic").focus();
+              return false;
+            }
+            else if (!reg.test(document.getElementById("itempic").value))
+            {
+              document.getElementById("itempicflag").innerHTML = "&nbsp;&nbsp;&nbsp;&nbsp;<span class=\"glyphicon glyphicon-remove\" aria-hidden=\"true\">错误：图片格式错误</span>";
+              document.getElementById("itempic").focus();
+              return false;
+            }
+            else
+            {
+              document.getElementById("itempicflag").innerHTML = "&nbsp;&nbsp;&nbsp;&nbsp;<span class=\"glyphicon glyphicon-ok\" aria-hidden=\"true\"></span>";
+               return true;
+            }
+        }
+
+        function checkAll(){
+          if (checkItemName() && checkItemPrice() && checkItemPic())
+          {
+              addChild();
+              document.getElementById("itemname").value = "";
+              document.getElementById("itemprice").value = "";
+              document.getElementById("itempic").value = "";
+              $('#myModal').modal('hide');
+          }
+          return true;
+        }
+
+
+
+        function addChild()
+        {
+            var name = document.getElementById("itemname");
+            var price = document.getElementById("itemprice");
+            var pic = document.getElementById("itempic");
+            var toAdd= document.getElementById('toAdd');
+            var str = "<div class=\"col-md-3\">";
+            str += "<div class=\"thumbnail\">";
+            str += "<img src=\"" + pic.value + "\" alt=\"...\" width=\"200px\">";
+            str += "<div class=\"caption\">";
+            str += "<h4>" + name.value + "</h4>";
+            str += "<p>" + price.value + "</p>";
+            str += "<p><a href=\"#\" class=\"btn btn-danger\" role=\"button\">现在购买</a>&nbsp;&nbsp;&nbsp;&nbsp;<a href=\"#\" class=\"btn btn-default\" role=\"button\">详情</a></p>";
+            str += "</div></div></div>"                                                                  
+                                                                  
+            toAdd.innerHTML+=str;
+        }
+
+      </script>       
+
+
+<div style="float:left;">
+    <p>&nbsp</p>
+    <p>&nbsp</p>
+    <p>&nbsp</p>
+    <p>&nbsp</p>
+</div>
+<div style=float:left">
+    <hr />
+    <div class="alert" style="background:">
+        <div class="row">
+            <div class="col-md-3 col-md-offset-2">
+                <p><a href="">相关网站</a></p>
+                <p><a href="">相关网站</a></p>
+                <p><a href="">相关网站</a></p>
+            </div>
+             <div class="col-md-3">
+                <p><a href="">相关网站</a></p>
+                <p><a href="">相关网站</a></p>
+                <p><a href="">相关网站</a></p>
+            </div>
+             <div class="col-md-3">
+                <p><a href="">相关网站</a></p>
+                <p><a href="">相关网站</a></p>
+                <p><a href="">相关网站</a></p>
+            </div>
+        </div>
+    </div>
+    <hr />
+    <p class="container"></p>
+</div>
+
+
+
+</body>
+</html>
