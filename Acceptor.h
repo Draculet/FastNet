@@ -14,7 +14,7 @@ class Acceptor : base::noncopyable
     public:
     Acceptor(Eventloop *loop, int port):
         acceptloop_(loop),
-        acceptsoc_(new Socket(port)),   //socket已setReuse,setNonBlock
+        acceptsoc_(new Socket(port)),   //socket默认setReuse,setNonBlock
         acceptchan_(new Channel(acceptsoc_->getFd(), loop)),
         extraFd_(open("/dev/null", O_RDWR))
     {

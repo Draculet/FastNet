@@ -42,7 +42,7 @@ class Server : base::noncopyable
 
     void handleNewConn(int sockfd, NetAddr &addr)
     {
-        testPrint();
+        //testPrint();
         printf("*debug* handleNewConn\n");
         printf("New Connection Fd %d\n", sockfd);
         Eventloop *loop = pool_->getNextLoop();

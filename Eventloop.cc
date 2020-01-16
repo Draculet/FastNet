@@ -113,8 +113,8 @@ void Eventloop::runInThread()
 */
 /*
     11.10 new version
-    将runInTHread移到ThreadLoop
- */
+    将runInTHread移到ThreadLoop::runInThread(),使Eventloop在loop()中初始化
+*/
 
 
 void Eventloop::dotasks()
