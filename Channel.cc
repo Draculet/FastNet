@@ -15,9 +15,9 @@ Channel::Channel(int fd, Eventloop *loop)
         exist(false),
         loop_(loop),
         binded_(false)
-    {
+{
 
-    }
+}
 
 Channel::~Channel()
 {
@@ -34,6 +34,10 @@ void Channel::bindConn(shared_ptr<Connection> conn)
     binded_ = true;
 }
 
+/*
+    readCallback_等callback只传Connection的裸指针,传shared_ptr<Connection>会影响Connection析构
+    通过conn_.lock()保护指针
+*/
 void Channel::handleEvent()
 {
     //printf("*debug* handleEvent\n");

@@ -64,7 +64,7 @@ namespace net
                 buffer_.swap(tmp);
                 buffer_.resize(tmpSize + 2 * len);
                 memcpy(&(*(buffer_.begin())), &(*(tmp.begin())), tmpSize);
-                printf("*debug* now buffer size %d\n", buffer_.size());
+                printf("*debug* now buffer size %ld\n", buffer_.size());
                 //debug()
                 //printf("After enlager: %s\n", std::string(&(*(buffer_.begin())) + kreadIndex_, readable()).c_str());
                 //printf("vec.size() = %d\n", buffer_.size());
@@ -145,7 +145,7 @@ namespace net
             //打印的结果是connection reset by peer
             //使用long是否不妥
             const long n = readv(fd, vec, iovcnt); //readv可能返回-1,不能用size_t
-            printf("*debug* readv ret %d\n", n);
+            printf("*debug* readv ret %ld\n", n);
             if (n <= 0)
             {
                 if (n < 0)
@@ -178,13 +178,13 @@ namespace net
 
         void debug()
         {
-            printf("bufferAddress = %0x\n", buffer_.begin());
-            printf("kreadIndex_ = %d\n", kreadIndex_);
-            printf("kwriteIndex_ = %d\n", kwriteIndex_);
-            printf("readable() = %d\n", readable());
-            printf("writable() = %d\n", writable());
-            printf("vec.size() = %d\n", buffer_.size());
-            printf("vec.capacity() = %d\n", buffer_.capacity());
+            printf("bufferAddress = %p\n", &*buffer_.begin());
+            printf("kreadIndex_ = %ld\n", kreadIndex_);
+            printf("kwriteIndex_ = %ld\n", kwriteIndex_);
+            printf("readable() = %ld\n", readable());
+            printf("writable() = %ld\n", writable());
+            printf("vec.size() = %ld\n", buffer_.size());
+            printf("vec.capacity() = %ld\n", buffer_.capacity());
             printf("================================\n");
         }
 

@@ -1,10 +1,10 @@
-#ifndef ___UNIX_TIME__H__
-#define ___UNIX_TIME__H__
-
+#ifndef __UNIXTIME_H__
+#define __UNIXTIME_H__
 #include <time.h>
 #include <string>
 #include <sys/time.h>
 #include <stdint.h>
+
 class UnixTime
 {
     public:

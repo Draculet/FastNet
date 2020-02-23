@@ -63,7 +63,7 @@ class Connection : base::noncopyable, public std::enable_shared_from_this<Connec
     void handleRead()
     {
         long ret = inputbuffer_.readFd(soc_->getFd());
-        printf("*debug* Fd %d readFd ret %d\n", soc_->getFd(), ret);
+        printf("*debug* Fd %d readFd ret %ld\n", soc_->getFd(), ret);
         if (ret > 0)
         {
             if (readCallback_)
@@ -138,9 +138,13 @@ class Connection : base::noncopyable, public std::enable_shared_from_this<Connec
         //在主线程中移除连接,注意保护Connection,防止提前析构
         //在主线程移除连接之后应正常Connection析构,生命周期结束
         /*
+            Connection保护工作在Channel::handleEvent调用readCallback前通过shared_ptr完成保护
+            另外通过runInloop(bind(handleClose, (shared_ptr<Connection>)conn)))调用handleClose也可起到保护作用
+        */
+        /*
             debug用,故意延长时间
-         */
-        //sleep(1);
+        */
+        //sleep(10);
     }
 
     /*
@@ -204,7 +208,7 @@ class Connection : base::noncopyable, public std::enable_shared_from_this<Connec
                 //TODO 日志输出EAGIN错误
                 printf("*debug* In Thread %d send ret -1\n", gettid());
                 outputbuffer_.append(data, len);
-                printf("*debug* Current bufsize: %d\n", outputbuffer_.readable());
+                printf("*debug* Current bufsize: %ld\n", outputbuffer_.readable());
                 remain = len;
                 chan_->enableWrite();
             }
@@ -226,7 +230,7 @@ class Connection : base::noncopyable, public std::enable_shared_from_this<Connec
                 printf("*debug* In Thread %d send unFinish\n", gettid());
                 //assert(haswrite < len && haswrite >= 0);
                 outputbuffer_.append(data + haswrite, len - haswrite);
-                printf("*debug* Current bufsize: %d\n", outputbuffer_.readable());
+                printf("*debug* Current bufsize: %ld\n", outputbuffer_.readable());
                 remain = len - haswrite;
                 chan_->enableWrite();
             }
@@ -247,12 +251,12 @@ class Connection : base::noncopyable, public std::enable_shared_from_this<Connec
                 else
                 {
                     //TODO 默认丢掉数据
-                    printf("*debug* drop data %d bytes\n", outputbuffer_.readable());
+                    printf("*debug* drop data %ld bytes\n", outputbuffer_.readable());
                     outputbuffer_.retrieveAll();
                 }
             }
             outputbuffer_.append(data, len);
-            printf("*debug* After Drop Current bufsize: %d\n", outputbuffer_.readable());
+            printf("*debug* After Drop Current bufsize: %ld\n", outputbuffer_.readable());
             chan_->enableWrite();
         }
 

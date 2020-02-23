@@ -5,6 +5,7 @@
 #include "Channel.h"
 #include <sys/eventfd.h>
 #include "Gettid.h"
+#include "Timer.h"
 
 using namespace std;
 using namespace net;
@@ -14,6 +15,7 @@ Eventloop::Eventloop():
     poller_(new Poller()),
     tid_(gettid()), //初始化时直接赋值
     quit_(false),
+    timer_(new Timer(this)),
     wakeFd_(getWakeupFd()),
     wakechan_(new Channel(wakeFd_, this)),
     mutex_()
@@ -127,7 +129,7 @@ void Eventloop::dotasks()
     }
     if (tmptasks.size() != 0)
     {
-        printf("*debug* dotasks nums %d\n", tmptasks.size());
+        printf("*debug* dotasks nums %ld\n", tmptasks.size());
         for (auto task : tmptasks)
         {
             assert(task != nullptr);
@@ -162,4 +164,28 @@ void Eventloop::runInloop(function<void()> func)
 void Eventloop::update(Channel *channel)
 {
     poller_->update(channel);
+}
+
+void Eventloop::runTimeAt(UnixTime t, function<void()> cb, string name)
+{
+    TimeNode tn(cb, t, 0, name);
+    timer_->addTime(tn);
+}
+
+void Eventloop::runTimeAfter(double sec, function<void()> cb, string name)
+{
+    UnixTime t = UnixTime::now() + sec;
+    TimeNode tn(cb, t, 0, name);
+    timer_->addTime(tn);
+}
+void Eventloop::runTimeEach(double round, function<void()> cb, string name)
+{
+    UnixTime t = UnixTime::now();
+    TimeNode tn(cb, t, round, name);
+    timer_->addTime(tn);
+}
+
+void Eventloop::cancelTime(string name)
+{
+    timer_->cancelTime(name);
 }

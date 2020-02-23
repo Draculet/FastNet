@@ -9,6 +9,8 @@
 #include "Mutex.h"
 #include "Channel.h"
 
+class Timer;
+class UnixTime;
 namespace net
 {
     class Channel;
@@ -30,6 +32,10 @@ namespace net
         void wakeUp();
         int getWakeupFd();
         void handleRead();
+        void runTimeAt(UnixTime, std::function<void()>, std::string name = "default");
+        void runTimeAfter(double, std::function<void()>, std::string name = "default");
+        void runTimeEach(double, std::function<void()>, std::string name = "default");
+        void cancelTime(std::string);
         //TODO connectionList connlist;
         channelList activelist;
         taskQueue tasks;
@@ -38,7 +44,7 @@ namespace net
         int tid_;//用于判断currentThread是否是ownThread
         bool quit_;//用于判断loop退出否,是否应用mutex保护?
         //TODO quit_用atomic<bool>
-
+        std::unique_ptr<Timer> timer_;
         int wakeFd_;
         std::unique_ptr<Channel> wakechan_;
         Mutex mutex_;
