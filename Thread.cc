@@ -15,11 +15,13 @@ void *Thread::threadFunc(void *arg)
 Thread::~Thread()
 {
     //TODO 判断是否join
-    pthread_detach(pid_);
+    if (pid_ != -1)
+        pthread_detach(pid_);
 }
 
 Thread::Thread(function<void()> func):
-    td_(func)
+    td_(func),
+    pid_(-1)
 {
 
 }
