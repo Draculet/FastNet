@@ -6,4 +6,3 @@
 
 * 使用frame::toFrame可将要发送的数据进行WebSoceket帧封装后发送给对方.
 
-* WebSocketServer是一个简单的使用例子
